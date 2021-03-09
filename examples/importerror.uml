@@ -1,0 +1,17 @@
+
+     ┌────┐          ┌────┐
+     │a.py│          │b.py│
+     └─┬──┘          └─┬──┘
+       │    import b   │
+       │ ──────────────>
+       │               │
+       │    import a   │
+       │ <──────────────
+     ┌─┴──┐          ┌─┴──┐
+     │a.py│          │b.py│
+     └────┘          └────┘
+
+@startuml
+a.py -> b.py: import b
+b.py -> a.py: import a
+@enduml
