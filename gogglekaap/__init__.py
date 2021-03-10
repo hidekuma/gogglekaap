@@ -9,6 +9,7 @@ def create_app():
 
     @app.route('/')
     def index():
+        app.logger.info('Run HelloWorld!')
         return 'Hello World'
 
     ''' === Routing Practice === '''
@@ -38,5 +39,32 @@ def create_app():
     @app.route('/test/urlfor/<path:subpath>')
     def urlfor(subpath):
         return redirect(url_for('path', subpath=subpath))
+
+    ''' === Request hook, Context controll  === '''
+    # https://flask.palletsprojects.com/en/1.1.x/api/
+    from flask import g, current_app
+    @app.before_first_request
+    def before_first_request():
+        app.logger.info('BEFORE_FIRST_REQUEST')
+
+    @app.before_request
+    def before_request():
+        g.test = True
+        app.logger.info('BEFORE_REQUEST')
+
+    @app.after_request
+    def after_request(response):
+        app.logger.info(f"g.test: {g.test}")
+        app.logger.info(f"current_app.config: {current_app.config}")
+        app.logger.info("AFTER_REQUEST")
+        return response
+
+    @app.teardown_request
+    def teardown_request(exception):
+        app.logger.info('TEARDOWN_REQUEST')
+
+    @app.teardown_appcontext
+    def teardown_appcontext(exception):
+        app.logger.info('TEARDOWN_CONTEXT')
 
     return app
