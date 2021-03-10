@@ -1,3 +1,4 @@
+{% include "_errors.html" %}
 <form method="POST" action="{{ url_for('auth.login') }}">
     {{ form.csrf_token }}
     {{ form.user_id.label }} {{ form.user_id(minlength=4, maxlength=20) }}

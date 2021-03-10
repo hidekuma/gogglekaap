@@ -2,7 +2,8 @@ from flask import (
     Blueprint,
     render_template,
     url_for,
-    redirect
+    redirect,
+    flash
 )
 from gogglekaap.forms.auth_form import LoginForm, RegisterForm
 
@@ -26,8 +27,7 @@ def login():
         password = form.data.get('password')
         return f'{user_id}, {password}'
     else:
-        # TODO: 에러컨트롤
-        pass
+        flash_form_errors(form)
     return render_template(f'{NAME}/login.html', form=form)
 
 @bp.route('/logout')
@@ -50,6 +50,10 @@ def register():
         user_name = form.data.get('user_name')
         return f'{user_id}, {password}, {repassword}, {user_name}'
     else:
-        # TODO: 에러컨트롤
-        pass
+        flash_form_errors(form)
     return render_template(f'{NAME}/register.html', form=form)
+
+def flash_form_errors(form):
+    for _, errors in form.errors.items():
+        for e in errors:
+            flash(e)
