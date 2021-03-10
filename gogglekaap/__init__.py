@@ -12,6 +12,10 @@ def create_app():
         # app.logger.info('Run HelloWorld!')
         return render_template('index.html')
 
+    @app.errorhandler(404)
+    def page_404(error):
+        return render_template('404.html'), 404
+
     # ''' === Method & Request context Practice === '''
     # from flask import request
     # @app.route('/test/method/', defaults={'id': 1}, methods=['GET', 'POST', 'DELETE', 'PUT'])
