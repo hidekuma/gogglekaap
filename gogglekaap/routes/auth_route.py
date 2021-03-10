@@ -8,6 +8,7 @@ from flask import (
     flash
 )
 from gogglekaap.forms.auth_form import LoginForm, RegisterForm
+from werkzeug import security
 
 NAME = 'auth'
 bp = Blueprint(NAME, __name__, url_prefix='/auth')
@@ -29,9 +30,9 @@ class User:
     user_name: str
     password: str
 
-USERS.append(User('hidekuma', 'hidekuma', '1234'))
-USERS.append(User('tester', 'tester', '1234'))
-USERS.append(User('admin', 'admin', '1234'))
+USERS.append(User('hidekuma', 'hidekuma', security.generate_password_hash('hidekuma')))
+USERS.append(User('tester', 'tester', security.generate_password_hash('tester')))
+USERS.append(User('admin', 'admin', security.generate_password_hash('admin')))
 
 @bp.route('/')
 def index():
@@ -47,11 +48,13 @@ def login():
         # 3) 패스워드 정합확인
         # 3) 로그인 유지(세션)
         user_id = form.data.get('user_id')
-        password = form.data.get('password')
         user = [user for user in USERS if user.user_id == user_id]
         if user:
             user = user[0]
-            if user.password != password:
+            if not security.check_password_hash(
+                user.password,
+                form.password.data
+            ):
                 flash('Password is not valid.')
             else:
                 session['user_id'] = user_id
@@ -82,10 +85,6 @@ def register():
         # 3) 없으면 유저 생성
         # 4) 로그인 유지(세션)
         user_id = form.data.get('user_id')
-        password = form.data.get('password')
-        repassword = form.data.get('repassword')
-        user_name = form.data.get('user_name')
-
         user = [user for user in USERS if user.user_id == user_id]
         if user:
             flash('User ID is already exsits.')
@@ -93,13 +92,16 @@ def register():
         else:
             USERS.append(User(
                 user_id = user_id,
-                user_name = user_name,
-                password = password
+                user_name = form.user_name.data,
+                password = security.generate_password_hash(form.password.data)
             ))
             session['user_id'] = user_id
         return redirect(url_for('base.index'))
     else:
         flash_form_errors(form)
+
+    if session.get('user_id'):
+        return redirect(url_for('base.index'))
     return render_template(f'{NAME}/register.html', form=form)
 
 def flash_form_errors(form):
