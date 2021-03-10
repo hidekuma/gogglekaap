@@ -18,10 +18,9 @@ def create_app():
     """ === CSRF Init === """
     csrf.init_app(app)
 
-    @app.route('/')
-    def index():
-        # app.logger.info('Run HelloWorld!')
-        return render_template('index.html')
+    """ === Routes Init === """
+    from gogglekaap.routes import base_route
+    app.register_blueprint(base_route.bp)
 
     from gogglekaap.forms.auth_form import LoginForm, RegisterForm
     @app.route('/auth/login', methods=['GET', 'POST'])
