@@ -12,6 +12,19 @@ def create_app():
         app.logger.info('Run HelloWorld!')
         return 'Hello World'
 
+    ''' === Method & Request context Practice === '''
+    from flask import request
+    @app.route('/test/method/', defaults={'id': 1}, methods=['GET', 'POST', 'DELETE', 'PUT'])
+    @app.route('/test/method/<int:id>', methods=['GET', 'POST', 'DELETE', 'PUT'])
+    def method_test(id):
+        return jsonify({
+            'id': id,
+            'request.args': request.args,
+            'request.form': request.form,
+            'request.json': request.json
+        })
+
+
     ''' === Routing Practice === '''
     from flask import jsonify, redirect, url_for
     from markupsafe import escape
