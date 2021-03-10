@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 
 # db = 'database'
 
@@ -10,7 +10,7 @@ def create_app():
     @app.route('/')
     def index():
         # app.logger.info('Run HelloWorld!')
-        return 'Hello World'
+        return render_template('index.html')
 
     # ''' === Method & Request context Practice === '''
     # from flask import request
