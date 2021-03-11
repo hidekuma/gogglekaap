@@ -21,6 +21,8 @@ def create_app():
     if app.config['DEBUG'] == True:
         app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 1
         app.config['TEMPLATES_AUTO_RELOAD'] = True
+        # TODO: 환경분리 및 Front호출시 토큰 삽입
+        app.config['WTF_CSRF_ENABLED'] = False
 
     """ === CSRF Init === """
     csrf.init_app(app)
