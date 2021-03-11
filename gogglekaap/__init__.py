@@ -31,6 +31,10 @@ def create_app():
     else:
         migrate.init_app(app, db)
 
+    """ === Restx Init === """
+    from .apis import blueprint as api
+    app.register_blueprint(api)
+
     """ === Routes Init === """
     from gogglekaap.routes import base_route, auth_route
     app.register_blueprint(base_route.bp)
