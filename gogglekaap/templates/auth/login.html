@@ -1,8 +1,50 @@
-{% include "_errors.html" %}
-<form method="POST" action="{{ url_for('auth.login') }}">
-    {{ form.csrf_token }}
-    {{ form.user_id.label }} {{ form.user_id(minlength=4, maxlength=20) }}
-    {{ form.password.label }} {{ form.password(maxlength=20) }}
-    {{ form.errors }}
-    <input type="submit" value="Go">
-</form>
+{% extends "/layout.html" %}
+
+{% block title -%}
+    Login
+{%- endblock %}
+
+{% block body -%}
+    <div class="mdl-grid">
+        {% include "_errors.html" %}
+        <div class="mdl-cell mdl-cell--4-col"></div>
+        <div class="mdl-cell mdl-cell--4-col">
+            <div class="mdl-card-wide mdl-card mdl-shadow--2dp">
+                <form method="POST" action="{{ url_for('auth.login') }}">
+                    {{ form.csrf_token }}
+                    <div class="mdl-card__title">
+                        <div id="logo">
+                            <span class="material-icons">
+                                article
+                            </span>
+                        </div>
+                        <span id="logoTitle" class="mdl-card__title-text">
+                            <a href="/">Kaap</a>: Login
+                        </span>
+                    </div>
+                    <div class="mdl-card__supporting-text">
+                        <!--TODO: Macro 만들기-->
+                        {{ form.user_id.label }} {{ form.user_id(minlength=4, maxlength=20) }}
+                        {{ form.password.label }} {{ form.password(maxlength=20) }}
+                    </div>
+
+                    <div class="mdl-card__actions mdl-card--border">
+                        <div class="mdl-grid">
+                            <button class="mdl-cell mdl-cell--12-col mdl-button mdl-button--raised mdl-button--colored mdl-js-button mdl-js-ripple-effect mdl-color-text--white">
+                                Login
+                            </button>
+                        </div>
+
+                        <div class="mdl-grid">
+                            <div class="mdl-cell mdl-cell--12-col">
+                                <a href="{{ url_for('auth.register') }}">회원가입</a>
+                                <a href="{{ url_for('base.index') }}" style="float: right">홈</a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="mdl-cell mdl-cell--4-col"></div>
+    </div>
+{%- endblock %}
