@@ -4,9 +4,13 @@
     Login
 {%- endblock %}
 
+{% from "_mdlforms.html" import render_text_field %}
+
 {% block body -%}
     <div class="mdl-grid">
-        {% include "_errors.html" %}
+        {% filter indent(width=8) -%}
+        {%- include "_errors.html" -%}
+        {%- endfilter %}
         <div class="mdl-cell mdl-cell--4-col"></div>
         <div class="mdl-cell mdl-cell--4-col">
             <div class="mdl-card-wide mdl-card mdl-shadow--2dp">
@@ -23,9 +27,8 @@
                         </span>
                     </div>
                     <div class="mdl-card__supporting-text">
-                        <!--TODO: Macro 만들기-->
-                        {{ form.user_id.label }} {{ form.user_id(minlength=4, maxlength=20) }}
-                        {{ form.password.label }} {{ form.password(maxlength=20) }}
+                        {{ render_text_field(form.user_id, minlength=4, maxlength=20, autocomplete='off') | indent(24)}}
+                        {{ render_text_field(form.password, maxlength=20) | indent(24) }}
                     </div>
 
                     <div class="mdl-card__actions mdl-card--border">

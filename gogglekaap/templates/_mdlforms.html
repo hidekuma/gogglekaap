@@ -1,0 +1,8 @@
+{% macro render_text_field(field) -%}
+<div style="width:100%;" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+  <!--<input class="mdl-textfield__input" id="login"/>-->
+  <!--<label class="mdl-textfield__label" for="login">Login</label>-->
+  {{ field(class='mdl-textfield__input', **kwargs) }}
+  {{ field.label(class='mdl-textfield__label') }}
+</div>
+{%- endmacro %}

@@ -4,9 +4,13 @@
     Register
 {%- endblock %}
 
+{% from "_mdlforms.html" import render_text_field %}
+
 {% block body -%}
     <div class="mdl-grid">
-        {% include "_errors.html" %}
+        {% filter indent(width=8) -%}
+        {%- include "_errors.html" -%}
+        {%- endfilter %}
         <div class="mdl-cell mdl-cell--4-col"></div>
         <div class="mdl-cell mdl-cell--4-col">
             <form method="POST" action="{{ url_for('auth.register') }}">
@@ -27,11 +31,10 @@
                         {#<h3 class="mdl-card__title-text">Sign up</h3>#}
                     </div>
                     <div class="mdl-card__supporting-text">
-                        <!--TODO: Macro 만들기-->
-                        {{ form.user_id.label }} {{ form.user_id(minlength=4, maxlength=20) }}
-                        {{ form.user_name.label }} {{ form.user_name(minlength=4, maxlength=20) }}
-                        {{ form.password.label }} {{ form.password(maxlength=20) }}
-                        {{ form.repassword.label }} {{ form.repassword(maxlength=20) }}
+                        {{ render_text_field(form.user_id, minlength=4, maxlength=20, autocomplete='off') | indent(24)}}
+                        {{ render_text_field(form.user_name, minlength=4, maxlength=20, autocomplete='off') | indent(24)}}
+                        {{ render_text_field(form.password, maxlength=20) | indent(24)}}
+                        {{ render_text_field(form.repassword, maxlength=20) | indent(24)}}
                     </div>
 
                     <div class="mdl-card__actions mdl-card--border">
