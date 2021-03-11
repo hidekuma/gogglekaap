@@ -16,6 +16,7 @@ def create_app():
     app.config['SESSION_COOKIE_NAME'] = 'gogglekaap'
     app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:password@localhost/gogglekaap?charset=utf8'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config['SWAGGER_UI_DOC_EXPANSION'] = 'list'
 
     if app.config['DEBUG'] == True:
         app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 1

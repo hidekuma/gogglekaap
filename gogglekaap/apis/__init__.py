@@ -1,6 +1,6 @@
 from flask import Blueprint
 from flask_restx import Api
-# TODO: Add api namespace
+from .user import ns as UserNamespace
 
 # TODO: Session based authentication
 
@@ -18,4 +18,4 @@ api = Api(
     description='Welcome My API docs',
 )
 
-# TODO: Add namespace to Blueprint
+api.add_namespace(UserNamespace)
