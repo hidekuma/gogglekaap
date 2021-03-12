@@ -16,7 +16,6 @@ class DevelopmentConfig(Config):
     DEBUG=True
     SEND_FILE_MAX_AGE_DEFAULT = 1
     TEMPLATES_AUTO_RELOAD = True
-    # TODO: Front호출시 토큰 삽입
     WTF_CSRF_ENABLED = False
 
 class TestingConfig(DevelopmentConfig):

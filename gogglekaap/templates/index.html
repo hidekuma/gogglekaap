@@ -10,6 +10,16 @@ Index
     <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
     <!--Masonry Image Loaded JS-->
     <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
+    <script charset="utf-8">
+        const CSRF_TOKEN = "{{ csrf_token() }}";
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", CSRF_TOKEN);
+                }
+            }
+        });
+    </script>
 {%- endblock %}
 
 {% block content %}
