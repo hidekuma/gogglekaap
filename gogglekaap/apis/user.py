@@ -22,6 +22,7 @@ post_parser.add_argument('password', required=True, help='유저 패스워드')
 
 @ns.route('')
 @ns.response(409, 'User id is already exists.')
+@ns.deprecated
 class UserList(Resource):
 
     @ns.marshal_list_with(user, skip_none=True)
@@ -51,6 +52,7 @@ class UserList(Resource):
 
 @ns.route('/<int:id>')
 @ns.param('id', '유저 고유 번호')
+@ns.deprecated
 class User(Resource):
 
     @ns.marshal_list_with(user, skip_none=True)

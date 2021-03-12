@@ -1,8 +1,16 @@
-from flask import Blueprint
+from flask import Blueprint, g, abort
 from flask_restx import Api
+from functools import wraps
+
 from .user import ns as UserNamespace
 
-# TODO: Session based authentication
+def check_session(func):
+    @wraps(func)
+    def __wrapper(*args, **kwargs):
+        if not g.user:
+            abort(401)
+        return func(*args, **kwargs)
+    return __wrapper
 
 blueprint = Blueprint(
     'api',
@@ -15,6 +23,7 @@ api = Api(
     title='Goggle Kaap API',
     version='1.0',
     doc='/docs',
+    decorators=[check_session],
     description='Welcome My API docs',
 )
 
