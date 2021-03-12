@@ -1,4 +1,5 @@
 import os
+import shutil
 from werkzeug.datastructures import FileStorage
 from werkzeug.utils import secure_filename
 from gogglekaap.models.memo import Memo as MemoModel
@@ -147,6 +148,19 @@ class Memo(Resource):
             memo.title = args['title']
         if args['content'] is not None:
             memo.content = args['content']
+        file = args['linked_image']
+        if file:
+            relative_path, upload_path = save_file(file)
+            if memo.linked_image:
+                origin_path = os.path.join(
+                    current_app.root_path,
+                    memo.linked_image
+                )
+                if origin_path != upload_path:
+                    if os.path.isfile(origin_path):
+                        shutil.rmtree(os.path.dirname(origin_path))
+            memo.linked_image = relative_path
+
         g.db.commit()
         return memo
 
