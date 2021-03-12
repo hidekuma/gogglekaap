@@ -9,6 +9,7 @@ class Config(object):
     SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:password@localhost/gogglekaap?charset=utf8'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SWAGGER_UI_DOC_EXPANSION = 'list'
+    USER_STATIC_BASE_DIR = 'user_images'
 
 
 class DevelopmentConfig(Config):
