@@ -4,6 +4,7 @@ sys.path.append('.')
 from gogglekaap.configs import TestingConfig
 from gogglekaap import create_app, db
 from gogglekaap.models.user import User as UserModel
+from gogglekaap.models.memo import Memo as MemoModel
 import pytest
 import os
 
@@ -16,14 +17,25 @@ def user_data():
         password='tester'
     )
 
+@pytest.fixture(scope='session')
+def memo_data():
+    yield dict(
+        title='title',
+        content='content',
+    )
 
 @pytest.fixture(scope='session')
-def app(user_data):
+def app(user_data, memo_data):
     app = create_app(TestingConfig())
     with app.app_context():
         db.drop_all()
         db.create_all()
-        db.session.add(UserModel(**user_data))
+        user = UserModel(**user_data)
+        db.session.add(user)
+        # flush()를 통해서, user 고유 아이디 조회
+        db.session.flush()
+        memo_data['user_id'] = user.id
+        db.session.add(MemoModel(**memo_data))
         db.session.commit()
         yield app
         # 불필요 디비 정리 및 삭제
