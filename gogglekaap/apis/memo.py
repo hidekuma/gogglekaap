@@ -26,20 +26,32 @@ put_parser = parser.copy()
 put_parser.replace_argument('title', required=False, help='메모 제목')
 put_parser.replace_argument('content', required=False, help='메모 내용')
 
+get_parser = reqparse.RequestParser()
+get_parser.add_argument('page', required=False, type=int, help='메모 페이지 번호')
+
 @ns.route("")
 class MemoList(Resource):
     @ns.marshal_list_with(memo, skip_none=True)
+    @ns.expect(get_parser)
     def get(self):
         '''메모 복수 조회'''
-        data = MemoModel.query.join(
+        args = get_parser.parse_args()
+        page = args['page']
+        per_page = 15
+        base_query = MemoModel.query.join(
             UserModel,
             UserModel.id == MemoModel.user_id
         ).filter(
             UserModel.id == g.user.id,
-        ).order_by(
+        )
+
+        pages = base_query.order_by(
             MemoModel.created_at.desc()
-        ).limit(10).all()
-        return data
+        ).paginate(
+            per_page=per_page,
+            page=page
+        )
+        return pages.items
 
     @ns.marshal_list_with(memo, skip_none=True)
     @ns.expect(parser)
