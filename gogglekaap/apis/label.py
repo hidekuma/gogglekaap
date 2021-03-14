@@ -22,6 +22,17 @@ parser.add_argument('content', required=True, type=str, help="라벨 내용")
 @ns.route('')
 class LabelList(Resource):
     @ns.marshal_list_with(label, skip_none=True)
+    def get(self):
+        '''라벨 복수 조회'''
+        pages = LabelModel.query.join(
+            UserModel,
+            UserModel.id == LabelModel.user_id
+        ).filter(
+            UserModel.id == g.user.id,
+        )
+        return pages.all()
+
+    @ns.marshal_list_with(label, skip_none=True)
     @ns.expect(parser)
     def post(self):
         '''라벨 생성'''
