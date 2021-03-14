@@ -1,6 +1,11 @@
 from gogglekaap import db
 from sqlalchemy import func
 
+memos_labels = db.Table('memos_labels',
+    db.Column('memo_id', db.Integer, db.ForeignKey('memo.id'), primary_key=True),
+    db.Column('label_id', db.Integer, db.ForeignKey('label.id'), primary_key=True)
+)
+
 class Memo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
@@ -23,4 +28,9 @@ class Memo(db.Model):
             ondelete='CASCADE'
         ),
         nullable=False
+    )
+    labels = db.relationship(
+        'Label',
+        secondary=memos_labels,
+        backref=db.backref('memos')
     )
