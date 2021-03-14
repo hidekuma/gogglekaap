@@ -56,3 +56,15 @@ class LabelList(Resource):
         g.db.add(label)
         g.db.commit()
         return label, 201
+
+@ns.route('/<id>')
+@ns.param('id', '라벨 고유 번호')
+class Label(Resource):
+    def delete(self, id):
+        '''라벨 삭제'''
+        label = LabelModel.query.get_or_404(id)
+        if label.user_id != g.user.id:
+            ns.abort(403)
+        g.db.delete(label)
+        g.db.commit()
+        return '', 204
