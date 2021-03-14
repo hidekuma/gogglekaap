@@ -150,3 +150,44 @@ def test_get_memo_status_is_deleted(client):
     assert r.status_code == 200
     assert len(r.json) >= 1
     assert r.json[0].get('is_deleted') == True
+
+def test_post_memo_with_labels(client, memo_data):
+    new_data = memo_data.copy()
+    new_data['labels'] = 'test,'
+
+    r = client.post(
+        '/api/memos',
+        data=new_data
+    )
+    assert r.status_code == 201
+    assert len(r.json.get('labels', [])) == 1
+    assert r.json.get('labels', [])[0]['content'] == 'test'
+
+
+def test_put_memo_with_labels(client, memo_data):
+    r = client.post(
+        '/api/memos',
+        data=memo_data
+    )
+    assert r.status_code == 201
+    assert len(r.json.get('labels', [])) == 0
+
+    r = client.put(
+        f'/api/memos/{r.json["id"]}',
+        data={
+            'labels': 'test,'
+        }
+    )
+
+    assert r.status_code == 200
+    assert len(r.json.get('labels', [])) == 1
+    assert r.json.get('labels', [])[0]['content'] == 'test'
+
+def test_get_memo_with_labels(client):
+    r = client.get(
+        '/api/memos?label=1',
+        follow_redirects=True
+    )
+    assert r.status_code == 200
+    assert len(r.json) >= 1
+    assert r.json[0]['labels'][0]['content'] == 'test'
