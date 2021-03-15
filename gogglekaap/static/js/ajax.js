@@ -504,14 +504,23 @@ const MEMO = (function(){
       labels.push($(item).val());
     });
 
-    console.log('attachLabels', id);
-    // TODO
-    // 1) 메모 업데이트 호출
-    // 2) 라벨 데이터 콤마 스트링처리
-    // 3) 라벨 칩 태그 생성 _makeLabelChipHtml
-    // 4) 메모 아이템에 라벨 칩 추가
-    // 5) 에러시 얼럿 노출
-    // 6) 완료 시 그리드 리셋: _resetGridLayout()
+    $.ajax({
+      url: '/api/memos/' + id,
+      type: 'put',
+      data: {
+        labels: labels.join(',')
+      },
+      success: function(r){
+        let html = '';
+        html += _makeLabelChipHtml(r);
+        $item.find('.item-chip').html(html);
+      },
+      error: function(e){
+        alert(e.responseText);
+      }
+    }).done(function(){
+      _resetGridLayout();
+    });
   }
 
   /* 메모 검색 조회 */
