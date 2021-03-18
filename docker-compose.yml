@@ -1,5 +1,18 @@
 version: '3.7'
 services:
+  gk-nginx:
+    container_name: gk-nginx
+    image: nginx
+    restart: always
+    volumes:
+      - ./etc/nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - gksocket:/tmp
+    networks:
+      - gknet
+    depends_on:
+      - gk-web
+    ports:
+      - 80:80
   gk-web:
     container_name: gk-web
     image: gk-web
@@ -13,6 +26,7 @@ services:
     volumes:
       #- ./gogglekaap/static/user_images:/var/www/gogglekaap/gogglekaap/static/user_images:rw
       - ./:/var/www/gogglekaap
+      - gksocket:/tmp
     restart: always
     environment:
       - FLASK_APP=gogglekaap
@@ -41,3 +55,4 @@ networks:
 
 volumes:
   gkvolume:
+  gksocket:

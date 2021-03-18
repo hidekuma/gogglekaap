@@ -1,5 +1,17 @@
 version: '3.7'
 services:
+  gk-nginx:
+    container_name: gk-nginx
+    image: nginx
+    restart: always
+    volumes:
+      - ./etc/nginx/uwsgi.default.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - gknet
+    depends_on:
+      - gk-web
+    ports:
+      - 80:80
   gk-web:
     container_name: gk-web
     image: gk-web-uwsgi
@@ -8,8 +20,6 @@ services:
       dockerfile: ./uwsgi.Dockerfile
     networks:
       - gknet
-    ports:
-      - 8080:8080
     depends_on:
       - gk-db
     volumes:
