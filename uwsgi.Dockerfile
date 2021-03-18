@@ -26,5 +26,8 @@ ENV PATH="/home/python/.local/bin:${PATH}"
 # 8080 포트 노출
 EXPOSE 8080
 
+# 엔트리포인트 실행권한 추가
+RUN chmod +x ./etc/uwsgi.docker-entrypoint.sh
+
 # uwsgi 실행
-CMD ["uwsgi", "./etc/uwsgi/uwsgi.ini"]
+#CMD ["uwsgi", "./etc/uwsgi/uwsgi.ini"]

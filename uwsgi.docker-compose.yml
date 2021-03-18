@@ -1,0 +1,45 @@
+version: '3.7'
+services:
+  gk-web:
+    container_name: gk-web
+    image: gk-web-uwsgi
+    build:
+      context: .
+      dockerfile: ./uwsgi.Dockerfile
+    networks:
+      - gknet
+    ports:
+      - 8080:8080
+    depends_on:
+      - gk-db
+    volumes:
+      #- ./gogglekaap/static/user_images:/var/www/gogglekaap/gogglekaap/static/user_images:rw
+      - ./:/var/www/gogglekaap
+    restart: always
+    environment:
+      - FLASK_APP=gogglekaap
+      - FLASK_ENV=${FLASK_ENV:-development}
+      - SQLALCHEMY_DATABASE_URI=${SQLALCHEMY_DATABASE_URI}
+    command: ['sh', './etc/uwsgi.docker-entrypoint.sh']
+  gk-db:
+    container_name: gk-db
+    image: mysql:5.7
+    networks:
+      - gknet
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: gogglekaap
+    command:
+      - --character-set-server=utf8
+      - --collation-server=utf8_unicode_ci
+    ports:
+      - 3306:3306
+    volumes:
+      - gkvolume:/var/lib/mysql
+    restart: always
+
+networks:
+  gknet:
+
+volumes:
+  gkvolume:
