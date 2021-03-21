@@ -2,7 +2,8 @@ from flask import (
     Blueprint,
     render_template,
     url_for,
-    redirect
+    redirect,
+    flash
 )
 from gogglekaap.forms.auth_form import LoginForm, RegisterForm
 
@@ -25,6 +26,8 @@ def login():
         user_id = form.user_id.data
         password = form.password.data
         return f'{user_id}, {password}'
+    else:
+        flash_form_errors(form)
 
     return render_template(
         f'{NAME}/login.html',
@@ -49,8 +52,16 @@ def register():
         password = form.password.data
         repassword = form.repassword.data
         return f'{user_id}, {user_name}, {password}, {repassword}'
+    else:
+        flash_form_errors(form)
+
     return render_template(
         f'{NAME}/register.html',
         form=form
     )
 
+def flash_form_errors(form):
+    # {'password' : ['password must match']}
+    for _, errors in form.errors.items():
+        for e in errors:
+            flash(e)
