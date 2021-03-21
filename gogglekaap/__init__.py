@@ -8,6 +8,7 @@ def create_app():
 
     @app.route('/')
     def index():
+        app.logger.info('RUN HELLOWORLD!')
         return "Hello World and Python!"
 
 
@@ -38,5 +39,37 @@ def create_app():
     @app.route('/test/urlfor')
     def urlfor():
         return redirect(url_for('name', name='hidekuma'))
+
+    ''' === Request hook, Context controll === '''
+    from flask import g, current_app
+
+    @app.before_first_request
+    def before_first_request():
+        app.logger.info('BEFORE_FIRST_REQUEST')
+
+    @app.before_request
+    def before_request():
+        g.test = True
+        app.logger.info("BEFORE_REQUEST")
+
+    @app.after_request
+    def after_request(response):
+        print(g.test)
+        print('mode:', current_app.config['DEBUG'])
+        print(app.config['DEBUG'])
+        g.test = False
+        app.logger.info('AFTER_REQUEST')
+        return response
+
+    @app.teardown_request
+    def teardown_request(exception):
+        print(g.test)
+        app.logger.info('TEARDOWN_REQUEST')
+
+    @app.teardown_appcontext
+    def teardown_appcontext(exception):
+        app.logger.info('TEARDOWN_APPCONTEXT')
+
+
 
     return app
