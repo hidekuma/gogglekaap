@@ -70,6 +70,19 @@ def create_app():
     def teardown_appcontext(exception):
         app.logger.info('TEARDOWN_APPCONTEXT')
 
-
+    ''' === Method & Request context Practice === '''
+    from flask import request
+    @app.route('/test/method', methods=['GET', 'POST'])
+    def method_test():
+        return jsonify({
+            'request.host': request.host,
+            'request.path': request.path,
+            'request.url': request.url,
+            'request.args': request.args,
+            'request.form': request.form,
+            'request.form.test': request.form.get('test'),
+            'request.json': request.json,
+            'requset.method': request.method
+        })
 
     return app
