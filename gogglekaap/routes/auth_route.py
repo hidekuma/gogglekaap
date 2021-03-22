@@ -8,6 +8,7 @@ from flask import (
     session
 )
 from gogglekaap.forms.auth_form import LoginForm, RegisterForm
+from gogglekaap.models.user import User as UserModel
 from werkzeug import security
 
 ''' === login test === '''
