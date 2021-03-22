@@ -3,9 +3,34 @@ from flask import (
     render_template,
     url_for,
     redirect,
-    flash
+    flash,
+    request,
+    session
 )
 from gogglekaap.forms.auth_form import LoginForm, RegisterForm
+
+''' === login test === '''
+from dataclasses import dataclass
+
+USERS = []
+
+@dataclass
+class User:
+    """
+    class User:
+        def __init__(self, user_id, user_name, password):
+            self.user_id = user_id
+            self.user_name = user_name
+            self.password = password
+    """
+    user_id: str
+    user_name: str
+    password: str
+
+USERS.append(User('hidekuma', 'hidekuma', '1234'))
+USERS.append(User('tester', 'tester', '1234'))
+USERS.append(User('admin', 'admin', '1234'))
+
 
 NAME = 'auth'
 bp = Blueprint(NAME, __name__, url_prefix='/auth')
@@ -17,17 +42,27 @@ def index():
 
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
-    # TODO
-    # 1) 존재하는지 유저 확인
-    # 2) 패스워드 정합확인
-    # 3) 로그인 유지 (세션)
     form = LoginForm()
     if form.validate_on_submit():
         user_id = form.user_id.data
         password = form.password.data
-        return f'{user_id}, {password}'
+        user = [user for user in USERS if user.user_id == user_id]
+        if user:
+            user = user[0]
+            if user.password != password:
+                flash('Password is not valid.')
+            else:
+                session['user_id'] = user_id
+                return redirect(url_for('base.index'))
+        else:
+            flash('User ID is not exists.')
+
+        return redirect(request.path)
     else:
         flash_form_errors(form)
+
+    if session.get('user_id'):
+        return redirect(url_for('base.index'))
 
     return render_template(
         f'{NAME}/login.html',
@@ -36,24 +71,36 @@ def login():
 
 @bp.route('/logout')
 def logout():
-    # TODO: 유저 세션 제거
-    return 'logout'
+    session.pop('user_id', None)
+    return redirect(url_for(f'{NAME}.login'))
+
 
 @bp.route('/register', methods=['GET', 'POST'])
 def register():
-    # TODO
-    # 1) 유저가 존재하는지 확인
-    # 2) 없으면 유저 생성
-    # 3) 로그인 유지 (세션)
     form = RegisterForm()
     if form.validate_on_submit():
         user_id = form.user_id.data
         user_name = form.user_name.data
         password = form.password.data
-        repassword = form.repassword.data
-        return f'{user_id}, {user_name}, {password}, {repassword}'
+
+        user = [user for user in USERS if user.user_id == user_id]
+        if user:
+            flash('User ID is already exists.')
+            return redirect(request.path)
+        else:
+            USERS.append(User(
+                user_id=user_id,
+                user_name=user_name,
+                password=password
+            ))
+            session['user_id'] = user_id
+
+        return redirect(url_for('base.index'))
     else:
         flash_form_errors(form)
+
+    if session.get('user_id'):
+        return redirect(url_for('base.index'))
 
     return render_template(
         f'{NAME}/register.html',

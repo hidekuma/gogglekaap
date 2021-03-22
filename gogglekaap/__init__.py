@@ -8,6 +8,7 @@ def create_app():
     app = Flask(__name__)
 
     app.config['SECRET_KEY'] = 'secret'
+    app.config['SESSION_COOKIE_NAME'] = 'gogglekaap'
 
     if app.config['DEBUG'] == True:
         app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 1

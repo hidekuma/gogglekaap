@@ -9,5 +9,5 @@ Index
 {%- endblock %}
 
 {% block body -%}
-index page
+    {{ session.get('user_id') }}
 {%- endblock %}
