@@ -8,6 +8,7 @@ from flask import (
     session
 )
 from gogglekaap.forms.auth_form import LoginForm, RegisterForm
+from werkzeug import security
 
 ''' === login test === '''
 from dataclasses import dataclass
@@ -27,9 +28,21 @@ class User:
     user_name: str
     password: str
 
-USERS.append(User('hidekuma', 'hidekuma', '1234'))
-USERS.append(User('tester', 'tester', '1234'))
-USERS.append(User('admin', 'admin', '1234'))
+USERS.append(User(
+    'hidekuma',
+    'hidekuma',
+    security.generate_password_hash('1234')
+))
+USERS.append(User(
+    'tester',
+    'tester',
+    security.generate_password_hash('1234')
+))
+USERS.append(User(
+    'admin',
+    'admin',
+    security.generate_password_hash('1234')
+))
 
 
 NAME = 'auth'
@@ -49,7 +62,7 @@ def login():
         user = [user for user in USERS if user.user_id == user_id]
         if user:
             user = user[0]
-            if user.password != password:
+            if not security.check_password_hash(user.password, password):
                 flash('Password is not valid.')
             else:
                 session['user_id'] = user_id
@@ -91,7 +104,7 @@ def register():
             USERS.append(User(
                 user_id=user_id,
                 user_name=user_name,
-                password=password
+                password=security.generate_password_hash(password)
             ))
             session['user_id'] = user_id
 
