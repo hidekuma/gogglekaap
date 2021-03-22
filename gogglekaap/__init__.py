@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, g
 from flask_wtf.csrf import CSRFProtect
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
@@ -31,6 +31,17 @@ def create_app():
     from gogglekaap.routes import base_route, auth_route
     app.register_blueprint(base_route.bp)
     app.register_blueprint(auth_route.bp)
+
+    ''' === Request Hook === '''
+    @app.before_request
+    def before_request():
+        # app.logger.info('BEFORE_REQUEST')
+        g.db = db.session
+
+    @app.teardown_request
+    def teardown_request(exception):
+        if hasattr(g, 'db'):
+            g.db.close()
 
     @app.errorhandler(404)
     def page_404(error):
