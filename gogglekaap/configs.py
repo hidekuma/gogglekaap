@@ -1,3 +1,6 @@
+import os
+
+BASE_PATH = os.path.dirname(os.path.abspath(__file__))
 
 class Config(object):
     """Flask Config"""
@@ -15,6 +18,9 @@ class DevelopmentConfig(Config):
     # TODO: 환경분리 및 Front 호출시 토큰삽입 처리
     WTF_CSRF_ENABLED = False
 
+class TestingConfig(DevelopmentConfig):
+    TESTING = True
+    SQLALCHEMY_DATABASE_URI = f'sqlite:///{os.path.join(BASE_PATH, "sqlite_test.db")}'
 
 class ProductionConfig(Config):
     """Flask Confir Production"""
