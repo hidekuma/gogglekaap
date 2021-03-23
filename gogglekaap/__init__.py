@@ -8,20 +8,20 @@ db = SQLAlchemy()
 migrate = Migrate()
 
 
-def create_app():
+def create_app(config=None):
     print('run: create_app()')
     app = Flask(__name__)
 
-    app.config['SECRET_KEY'] = 'secret'
-    app.config['SESSION_COOKIE_NAME'] = 'gogglekaap'
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:password@localhost/gogglekaap?charset=utf8'
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    app.config['SWAGGER_UI_DOC_EXPANSION'] = 'list'
+    ''' === Flask Configuration === '''
+    from .configs import DevelopmentConfig, ProductionConfig
+    if not config:
+        if app.config['DEBUG'] == True:
+            config = DevelopmentConfig()
+        else:
+            config = ProductionConfig()
 
-    if app.config['DEBUG'] == True:
-        app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 1
-        # TODO: 환경분리 및 Front 호출시 토큰삽입 처리
-        app.config['WTF_CSRF_ENABLED'] = False
+    print('run with: ', config)
+    app.config.from_object(config)
 
     ''' === CSRF Init === '''
     csrf.init_app(app)
