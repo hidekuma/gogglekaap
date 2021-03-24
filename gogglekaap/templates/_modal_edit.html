@@ -1,0 +1,21 @@
+<dialog class="mdl-dialog">
+  <form id="modalEdit" class="mdl-card mdl-shadow--2dp">
+    <input type="hidden" name="modal-modified" class="modal-modified" value="0" disabled>
+    <div class="mdl-card__title">
+      <input class="modal-title modal-field" type="text" name="title" value="" placeholder="Title" autocomplete="off">
+    </div>
+    <div class="modal-media mdl-card__media"></div>
+    <div class="modal-content-wrapper mdl-card__supporting-text">
+      <textarea class="modal-content modal-field" name="content" placeholder="Content"></textarea> 
+    </div>
+    <div class="mdl-card__actions mdl-card--border">
+      <label class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" for="linked_image">
+        <i class="material-icons-outlined">insert_photo</i>
+        <input id="linked_image" class="modal-file" style="display: none;" type="file" onchange="readInputFile(this);" name="linked_image" accept=".gif,.jpg,.jpeg,.png"/>
+      </label>
+      <button class="modal-close mdl-button mdl-js-button">
+        닫기
+      </button>
+    </div>
+  </form>
+</dialog>
