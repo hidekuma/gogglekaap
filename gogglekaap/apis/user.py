@@ -23,6 +23,7 @@ post_parser.add_argument('password', required=True, help='유저 패스워드')
 
 
 
+@ns.deprecated
 @ns.route('')
 class UserList(Resource):
 
@@ -50,6 +51,7 @@ class UserList(Resource):
         return user, 201
 
 
+@ns.deprecated
 @ns.route('/<int:id>')
 @ns.param('id', description='유저 고유 번호')
 class User(Resource):
