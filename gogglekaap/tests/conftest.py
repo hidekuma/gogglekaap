@@ -6,6 +6,7 @@ import os
 from gogglekaap.configs import TestingConfig
 from gogglekaap import create_app, db
 from gogglekaap.models.user import User as UserModel
+from gogglekaap.models.memo import Memo as MemoModel
 
 @pytest.fixture(scope='session')
 def user_data():
@@ -16,12 +17,23 @@ def user_data():
     )
 
 @pytest.fixture(scope='session')
-def app(user_data):
+def memo_data():
+    yield dict(
+        title='title',
+        content='content'
+    )
+
+@pytest.fixture(scope='session')
+def app(user_data, memo_data):
     app = create_app(TestingConfig())
     with app.app_context():
         db.drop_all()
         db.create_all()
-        db.session.add(UserModel(**user_data))
+        user = UserModel(**user_data)
+        db.session.add(user)
+        db.session.flush()
+        memo_data['user_id'] = user.id
+        db.session.add(MemoModel(**memo_data))
         db.session.commit()
         yield app
 
