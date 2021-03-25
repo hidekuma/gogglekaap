@@ -32,3 +32,15 @@ class MemoList(Resource):
         ).limit(10).all()
 
         return data
+
+
+@ns.param('id', '메모 고유 번호')
+@ns.route('/<int:id>')
+class Memo(Resource):
+    @ns.marshal_list_with(memo, skip_none=True)
+    def get(self, id):
+        """메모 단수 조회"""
+        memo = MemoModel.query.get_or_404(id)
+        if memo.user_id != g.user.id:
+            ns.abort(403)
+        return memo
