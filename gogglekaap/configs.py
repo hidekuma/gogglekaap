@@ -15,7 +15,6 @@ class DevelopmentConfig(Config):
     """Flask Config for Dev"""
     DEBUG = True
     SEND_FILE_MAX_AGE_DEFAULT = 1
-    # TODO: 환경분리 및 Front 호출시 토큰삽입 처리
     WTF_CSRF_ENABLED = False
 
 class TestingConfig(DevelopmentConfig):

@@ -32,6 +32,7 @@ def create_app(config=None):
 
     """ === RestX Init === """
     from .apis import blueprint as api
+    # csrf.exempt(api)
     app.register_blueprint(api)
 
     """ === Routes Init === """
