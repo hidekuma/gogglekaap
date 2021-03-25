@@ -207,13 +207,25 @@ const MEMO = (function(){
       }
     }
     if (submitFlag) {
-      console.log('createMemo');
-      // TODO
-      // 1) 폼 기반 호출: AJAX -> form, multipart
-      // 2) 조회한 메모 데이터 생성: _makeMemoHtml
-      // 3) 컨테이너에 추가: prepend to grid
-      // 4) 에러 얼럿 노출: error e.responseText
-      // 5) 모달 리셋: done - resetModalFields(true)
+      $.ajax({
+        url: '/api/memos',
+        type: 'post',
+        data: data,
+        enctype: 'multipart/form-data',
+        contentType: false,
+        processData: false,
+        success: function(r){
+          let itemHtml = _makeMemoHtml(r);
+          let $items = $(itemHtml);
+          $GRID.prepend($items).masonry('prepended', $items);
+        },
+        error: function(e){
+          alert(e.responseText);
+        },
+        complete: function(){
+          resetModalFields(true);
+        }
+      });
     }
   };
 
