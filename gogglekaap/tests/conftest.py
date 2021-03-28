@@ -3,6 +3,7 @@ sys.path.append('.')
 
 import pytest
 import os
+import shutil
 from gogglekaap.configs import TestingConfig
 from gogglekaap import create_app, db
 from gogglekaap.models.user import User as UserModel
@@ -36,6 +37,9 @@ def app(user_data, memo_data):
         db.session.add(MemoModel(**memo_data))
         db.session.commit()
         yield app
+
+        path = os.path.join(app.static_folder, app.config['USER_STATIC_BASE_DIR'], user_data['user_id'])
+        shutil.rmtree(path, True)
 
         db.drop_all()
         db_path = app.config['SQLALCHEMY_DATABASE_URI'].replace(
