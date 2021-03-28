@@ -160,7 +160,8 @@ Thumbs.db #thumbnail cache on Windows
 .LSOverride
 
 # Icon must end with two \r
-Icon
+Icon
+
 
 # Thumbnails
 ._*
@@ -276,5 +277,8 @@ $RECYCLE.BIN/
 
 # Sqlite
 *.db
+
+# vscode
+.vscode
 
 # End of https://www.toptal.com/developers/gitignore/api/flask,python,macos,windows
