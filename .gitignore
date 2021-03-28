@@ -281,4 +281,7 @@ $RECYCLE.BIN/
 # vscode
 .vscode
 
+# userimages
+gogglekaap/static/user_images/*
+
 # End of https://www.toptal.com/developers/gitignore/api/flask,python,macos,windows
