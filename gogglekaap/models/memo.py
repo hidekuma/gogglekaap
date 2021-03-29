@@ -6,6 +6,7 @@ class Memo(db.Model):
     title = db.Column(db.String(100), nullable=False)
     content = db.Column(db.Text, nullable=False)
     linked_image = db.Column(db.String(200), nullable=True)
+    is_deleted = db.Column(db.Boolean(), nullable=False, default=False)
     created_at = db.Column(db.DateTime(), default=func.now())
     updated_at = db.Column(
         db.DateTime(),

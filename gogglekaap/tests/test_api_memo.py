@@ -114,3 +114,40 @@ def test_delete_memo_img(client, memo_data):
         follow_redirects=True
     )
     assert r.json.get('linked_image') is None
+
+def test_put_memo_status_is_deleted(client):
+    r = client.get(
+        '/api/memos',
+        follow_redirects=True
+    )
+    assert r.status_code == 200
+    assert r.json[0].get('is_deleted') == False
+
+    r = client.put(
+        f'/api/memos/{r.json[0]["id"]}',
+        data={
+            'is_deleted': True
+        }
+    )
+
+    assert r.status_code == 200
+    assert r.json.get('is_deleted') == True
+
+def test_post_memo_status_is_deleted(client, memo_data):
+    data = memo_data.copy()
+    data['is_deleted'] = True
+    r = client.post(
+        '/api/memos',
+        data=data
+    )
+    assert r.status_code == 201
+    assert r.json.get('is_deleted') == True
+
+def test_get_memo_status_is_deleted(client):
+    r = client.get(
+        '/api/memos?is_deleted=true',
+        follow_redirects=True
+    )
+    assert r.status_code == 200
+    assert len(r.json) >= 1
+    assert r.json[0].get('is_deleted') == True
