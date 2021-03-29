@@ -5,6 +5,7 @@ from flask import g, current_app
 from werkzeug.utils import secure_filename
 from werkzeug.datastructures import FileStorage
 import os
+import shutil
 
 
 ns = Namespace(
@@ -147,6 +148,18 @@ class Memo(Resource):
             memo.title = args['title']
         if args['content']:
             memo.content = args['content']
+        file = args['linked_image']
+        if file:
+            relative_path, upload_path = save_file(file)
+            if memo.linked_image:
+                origin_path = os.path.join(
+                    current_app.root_path,
+                    memo.linked_image
+                )
+                if origin_path != upload_path:
+                    if os.path.isfile(origin_path):
+                        shutil.rmtree(os.path.dirname(origin_path))
+            memo.linked_image = relative_path
         g.db.commit()
         return memo
 
