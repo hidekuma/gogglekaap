@@ -284,4 +284,7 @@ $RECYCLE.BIN/
 # userimages
 gogglekaap/static/user_images/*
 
+# env
+.env
+
 # End of https://www.toptal.com/developers/gitignore/api/flask,python,macos,windows
