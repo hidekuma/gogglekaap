@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, session, request
 from gogglekaap.forms.auth_form import LoginForm, RegisterForm
+from werkzeug import security
 
 NAME = 'auth'
 bp = Blueprint(NAME, __name__, url_prefix='/auth')
@@ -21,9 +22,9 @@ class User:
     user_name: str
     password: str
 
-USERS.append(User('hidekuma', 'hidekuma', '1234'))
-USERS.append(User('admin', 'admin', '1234'))
-USERS.append(User('tester', 'tester', '1234'))
+USERS.append(User('hidekuma', 'hidekuma', security.generate_password_hash('1234')))
+USERS.append(User('admin', 'admin', security.generate_password_hash('1234')))
+USERS.append(User('tester', 'tester', security.generate_password_hash('1234')))
 
 
 @bp.route('/')
@@ -46,7 +47,7 @@ def login():
         user = [user for user in USERS if user.user_id == user_id]
         if user:
             user = user[0]
-            if user.password != password:
+            if not security.check_password_hash(user.password, password):
                 flash('Password is not valid.')
             else:
                 session['user_id'] = user_id
@@ -79,7 +80,7 @@ def register():
                 User(
                     user_id=user_id,
                     user_name=user_name,
-                    password=password
+                    password=security.generate_password_hash(password)
                 )
             )
             session['user_id'] = user_id
