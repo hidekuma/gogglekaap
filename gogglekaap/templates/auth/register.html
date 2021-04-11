@@ -1,9 +1,9 @@
+{% include "_errors.html" %}
 <form method="POST" action="{{ url_for('auth.register') }}">
     {{ form.csrf_token }}
     {{ form.user_id.label }} {{ form.user_id(minlength=4, maxlength=20) }}
     {{ form.user_name.label }} {{ form.user_name(minlength=4, maxlength=20) }}
     {{ form.password.label }} {{ form.password(minlength=4, maxlength=20) }}
     {{ form.repassword.label }} {{ form.repassword(minlength=4, maxlength=20) }}
-    {{ form.errors }}
     <input type="submit" value="go">
 </form>
