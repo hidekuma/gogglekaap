@@ -20,10 +20,13 @@ def create_app():
     if app.config['DEBUG']:
         app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 1
 
+    '''CSRF INIT'''
+    csrf.init_app(app)
+
     '''DB INIT'''
     db.init_app(app)
     if app.config['SQLALCHEMY_DATABASE_URI'].startswith('sqlite'):
-        migrate.init_app(app, db, render_as_batch=True)
+        migrate.init_app(app, db, render_as_bakkktch=True)
     else:
         migrate.init_app(app, db)
 
@@ -32,9 +35,9 @@ def create_app():
     app.register_blueprint(base_route.bp)
     app.register_blueprint(auth_route.bp)
 
-    '''CSRF INIT'''
-    csrf.init_app(app)
-
+    '''Restx INIT'''
+    from gogglekaap.apis import blueprint as api
+    app.register_blueprint(api)
 
     '''REQUEST HOOK'''
     @app.before_request
