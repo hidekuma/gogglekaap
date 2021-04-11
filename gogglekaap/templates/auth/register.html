@@ -1,9 +1,52 @@
-{% include "_errors.html" %}
-<form method="POST" action="{{ url_for('auth.register') }}">
-    {{ form.csrf_token }}
-    {{ form.user_id.label }} {{ form.user_id(minlength=4, maxlength=20) }}
-    {{ form.user_name.label }} {{ form.user_name(minlength=4, maxlength=20) }}
-    {{ form.password.label }} {{ form.password(minlength=4, maxlength=20) }}
-    {{ form.repassword.label }} {{ form.repassword(minlength=4, maxlength=20) }}
-    <input type="submit" value="go">
-</form>
+{% extends "/layout.html" %}
+
+{% block title -%}
+    Register
+{%- endblock %}
+
+{% from "_mdlforms.html" import render_text_field %}
+
+{% block body -%}
+    <div class="mdl-grid">
+        {% filter indent(width=10) -%}
+        {% include "_errors.html" %}
+        {%- endfilter %}
+        <div class="mdl-cell mdl-cell--4-col"></div>
+        <div class="mdl-cell mdl-cell--4-col">
+            <form method="POST" action="{{ url_for('auth.register') }}">
+                {{ form.csrf_token }}
+                <div class="mdl-card-wide mdl-card mdl-shadow--2dp">
+                    <div class="mdl-card__title">
+                        <a href="javascript:window:history.back();" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+                            <i class="material-icons">arrow_back</i>
+                        </a>
+                        <div id="logo">
+                            <span class="material-icons">
+                                article
+                            </span>
+                        </div>
+                        <span id="logoTitle" class="mdl-card__title-text">
+                            <a href="/">Kaap</a>: Sign Up
+                        </span>
+                    </div>
+                    <div class="mdl-card__supporting-text">
+                        {{ render_text_field(form.user_id, minlength=4, maxlength=20, autocomplete='off') | indent(24) }}
+                        {{ render_text_field(form.user_name, minlength=4, maxlength=20, autocomplete='off') | indent(24) }}
+                        {{ render_text_field(form.password, minlength=4, maxlength=20, autocomplete='off') | indent(24) }}
+                        {{ render_text_field(form.repassword, minlength=4, maxlength=20, autocomplete='off') | indent(24) }}
+                    </div>
+
+                    <div class="mdl-card__actions mdl-card--border">
+                        <div class="mdl-grid">
+                            <button class="mdl-cell mdl-cell--12-col mdl-button mdl-button--raised mdl-button--colored mdl-js-button mdl-js-ripple-effect mdl-color-text--white">
+                                Sign up
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="mdl-cell mdl-cell--4-col"></div>
+    </div>
+
+{%- endblock %}

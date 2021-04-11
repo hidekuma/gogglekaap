@@ -1,3 +1,14 @@
-{% for message in get_flashed_messages() %}
-    {{ message }}
-{% endfor %}
+<div class="mdl-cell mdl-cell--4-col"></div>
+<div id="errors" class="mdl-cell mdl-cell--4-col">
+  <ul class="mdl-list">
+    {%- for message in get_flashed_messages() -%}
+      <li class="mdl-list__item">
+        <span class="mdl-list__item-primary-content">
+          <i class="material-icons mdl-list__item-icon">info</i>
+          {{ message }}
+        </span>
+      </li>
+    {%- endfor -%}
+  </ul>
+</div>
+<div class="mdl-cell mdl-cell--4-col"></div>
