@@ -20,6 +20,7 @@ def create_app():
 
     if app.config['DEBUG']:
         app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 1
+        app.config['WTF_CSRF_ENABLED'] = False
 
     '''CSRF INIT'''
     csrf.init_app(app)
