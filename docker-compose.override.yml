@@ -1,0 +1,21 @@
+version: '3.7'
+services:
+  gk-db:
+    container_name: gk-db
+    image: mysql:5.7
+    networks:
+      - gknet
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: gogglekaap
+    command:
+      - --character-set-server=utf8
+      - --collation-server=utf8_unicode_ci
+    #ports:
+      #- 3306:3306
+    volumes:
+      - gkvolume:/var/lib/mysql
+    restart: always
+
+volumes:
+  gkvolume:
