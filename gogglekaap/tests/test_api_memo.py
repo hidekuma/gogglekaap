@@ -104,7 +104,7 @@ def test_delete_memos_img(client, memo_data):
     memo_id = r.json['id']
 
     r = client.delete(
-        f'/api/memos/{memo_id}'
+        f'/api/memos/{memo_id}/image'
     )
     assert r.status_code == 204
 
