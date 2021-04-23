@@ -21,6 +21,10 @@ parser = reqparse.RequestParser()
 parser.add_argument('title', required=True, help='메모 제목')
 parser.add_argument('content', required=True, help='메모 내용')
 
+put_parser = parser.copy()
+put_parser.replace_argument('title', required=False, help='메모 제목')
+put_parser.replace_argument('content', required=False, help='메모 내용')
+
 @ns.route('')
 class MemoList(Resource):
 
@@ -62,3 +66,27 @@ class Memo(Resource):
         if g.user.id != memo.user_id:
             ns.abort(403)
         return memo
+
+    @ns.marshal_list_with(memo, skip_none=True)
+    @ns.expect(put_parser)
+    def put(self, id):
+        '''메모 업데이트'''
+        args = put_parser.parse_args()
+        memo = MemoModel.query.get_or_404(id)
+        if g.user.id != memo.user_id:
+            ns.abort(403)
+        if args['title'] is not None:
+            memo.title = args['title']
+        if args['content'] is not None:
+            memo.content = args['content']
+        g.db.commit()
+        return memo
+
+    def delete(self, id):
+        '''메모 삭제'''
+        memo = MemoModel.query.get_or_404(id)
+        if g.user.id != memo.user_id:
+            ns.abort(403)
+        g.db.delete(memo)
+        g.db.commit()
+        return '', 204
