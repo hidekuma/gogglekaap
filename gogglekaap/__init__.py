@@ -8,19 +8,20 @@ csrf = CSRFProtect()
 db = SQLAlchemy()
 migrate = Migrate()
 
-def create_app():
+def create_app(config=None):
     print('run: create_app()')
     app = Flask(__name__)
 
-    app.config['SECRET_KEY'] = 'secretkey'
-    app.config['SESSION_COOKIE_NAME'] = 'gogglekaap'
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:password@localhost/gogglekaap?charset=utf8'
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    app.config['SWAGGER_UI_DOC_EXPANSION'] = 'list'
+    """Flask Configs"""
+    from .configs import DevelopmentConfig, ProductionConfig
+    if not config:
+        if app.config['DEBUG']:
+            config = DevelopmentConfig()
+        else:
+            config = ProductionConfig()
 
-    if app.config['DEBUG']:
-        app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 1
-        app.config['WTF_CSRF_ENABLED'] = False
+    print('run with:', config)
+    app.config.from_object(config)
 
     '''CSRF INIT'''
     csrf.init_app(app)
