@@ -27,6 +27,7 @@ put_parser.replace_argument('content', required=False, help='메모 내용')
 
 get_parser = reqparse.RequestParser()
 get_parser.add_argument('page', required=False, type=int, help="메모 페이지 번호")
+get_parser.add_argument('needle', required=False, help="메모 검색어")
 
 @ns.route('')
 class MemoList(Resource):
@@ -37,6 +38,7 @@ class MemoList(Resource):
         '''메모 복수 조회'''
         args = get_parser.parse_args()
         page = args['page']
+        needle = args['needle']
         per_page = 15
 
         base_query = MemoModel.query.join(
@@ -45,6 +47,12 @@ class MemoList(Resource):
         ).filter(
             UserModel.id == g.user.id
         )
+
+        if needle:
+            needle = f'%{needle}%'
+            base_query = base_query.filter(
+                MemoModel.title.ilike(needle)|MemoModel.content.ilike(needle)
+            )
 
         pages = base_query.order_by(
             MemoModel.created_at.desc()
