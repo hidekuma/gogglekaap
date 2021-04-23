@@ -56,6 +56,158 @@
     <body>
       <!-------------------------------BLOCK BODY----------------------------------->
       {% block body %}
+      <!-------------------------------MDL LAYOUT----------------------------------->
+      <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+        <!-------------------------------HEADER----------------------------------->
+        <header class="mdl-layout__header">
+          <!-------------------------------좌측 상단 고정메뉴버튼----------------------------------->
+          <div id="menu">
+            <button class="mdl-button mdl-js-button mdl-button--icon">
+              <i class="material-icons">menu</i>
+            </button>
+          </div>
+          <!-------------------------------//좌측 상단 고정메뉴버튼----------------------------------->
+
+          <!-------------------------------헤더 컨텐츠----------------------------------->
+          <div class="mdl-layout__header-row">
+            <!-------------------------------로고----------------------------------->
+            <div id="logo">
+              <span class="material-icons">
+                article
+              </span>
+            </div>
+            <!-------------------------------//로고----------------------------------->
+            <!-------------------------------로고 타이틀----------------------------------->
+            <span id="logoTitle" class="mdl-layout-title">
+              <a href="{{ url_for('base.index') }}">Kaap</a>
+            </span>
+            <!-------------------------------//로고 타이틀----------------------------------->
+            <!-------------------------------네비게이션 인데, 서치박스로 사용----------------------------------->
+            <!--MDL 자동: 모바일에서 숨김처리 됨-->
+            <nav id="navActions" class="mdl-navigation mdl-layout--large-screen-only">
+              <!--searching-->
+              <div id="searchBox">
+                <!--search icon-->
+                <button class="mdl-button mdl-js-button mdl-button--icon">
+                  <label class="material-icons" for="searching">
+                    search
+                  </label>
+                </button>
+                <!--search input-->
+                <input id="searching" type="text" placeholder="검색" value="" name="searching" autocomplete="off"/>
+                <!--search needle clear button-->
+                <button class="cancel mdl-button mdl-js-button mdl-button--icon">
+                  <i class="material-icons">close</i>
+                </button>
+              </div>
+            </nav>
+            <!-------------------------------//네비게이션 인데, 서치박스로 사용----------------------------------->
+            <!-------------------------------스페이서----------------------------------->
+            <div class="mdl-layout-spacer"></div>
+            <!-------------------------------//스페이서----------------------------------->
+            <!-------------------------------기능 버튼과 로딩----------------------------------->
+            <div id="customActions">
+              <!--Refresh-->
+              <button class="refreshing mdl-button mdl-js-button mdl-button--icon" onclick="location.reload();">
+                <i class="material-icons">refresh</i>
+              </button>
+              <!--Loading-->
+              <div class="loading mdl-spinner mdl-js-spinner is-active"></div>
+            </div>
+            <!-------------------------------//기능 버튼과 로딩----------------------------------->
+            <!-------------------------------유저 로그인 상태----------------------------------->
+            <div class="profile">
+              {% if g.user -%}
+                <!--logined-->
+                <span class="mdl-chip mdl-chip--contact">
+                  <span class="mdl-chip__contact mdl-color--teal mdl-color-text--white">{{ g.user.user_name[0] | upper }}</span>
+                  <span class="mdl-chip__text">{{g.user.user_name}}</span>
+                  <a href="{{ url_for('auth.logout') }}" class="mdl-chip__action "><i class="material-icons">cancel</i></a>
+                </span>
+              {%- else -%}
+                <!--Not logined-->
+                <button class="mdl-button mdl-js-button mdl-button--icon" onclick='location.href="{{ url_for('auth.login') }}"'>
+                  <i class="material-icons">login</i>
+                </button>
+              {%- endif %}
+            </div>
+            <!-------------------------------//유저 로그인 상태----------------------------------->
+          </div>
+          <!-------------------------------//헤더 컨텐츠----------------------------------->
+        </header>
+        <!-------------------------------//HEADER----------------------------------->
+        <!-------------------------------MAIN----------------------------------->
+        <main id="mainWrapper" class="mdl-layout__content">
+          <!-------------------------------WRAPPER: 높이값을 위해----------------------------------->
+          <div class="wrapper">
+            <!-------------------------------좌측 메뉴----------------------------------->
+            <div id="sidemenu">
+              <!-------------------------------메모 버튼----------------------------------->
+              <button class="active sidemenu-btn-memo sidemenu-btn mdl-button mdl-js-button" onclick="MEMO.refreshMemos();">
+                <span class="sidemenu-icon material-icons-outlined">
+                  lightbulb
+                </span>
+                <span class="sidemenu-title">메모</span>
+              </button>
+              <!-------------------------------//메모 버튼----------------------------------->
+              <!-------------------------------라벨 버튼----------------------------------->
+              <button class="sidemenu-btn mdl-button mdl-js-button" onclick="MEMO.getMemosByLabel(1)">
+                <span class="sidemenu-icon material-icons-outlined">
+                label
+                </span>
+                <span class="sidemenu-title">Label1</span>
+              </button>
+              <!-------------------------------//라벨 버튼----------------------------------->
+              <!-------------------------------라벨 생성 버튼----------------------------------->
+              <button class="sidemenu-label-add-btn sidemenu-btn mdl-button mdl-js-button" onclick="event.stopPropagation();">
+                <!--label add icon-->
+                <span class="sidemenu-icon material-icons-outlined">
+                  new_label
+                </span>
+                <!--label title-->
+                <span class="sidemenu-title">
+                  <!--label input-->
+                  <input class="create" type="text" value="" placeholder="+  신규생성" maxlength=10 onchange="MEMO.addLabel(event);" autocomplete="off">
+                </span>
+              </button>
+              <!-------------------------------//라벨 생성 버튼----------------------------------->
+              <!-------------------------------삭제된 메모 보기 버튼----------------------------------->
+              <button class="sidemenu-btn mdl-button mdl-js-button" onclick="MEMO.getDeletedMemos();">
+                <span class="sidemenu-icon material-icons-outlined">
+                  delete
+                </span>
+                <span class="sidemenu-title">휴지통</span>
+              </button>
+              <!-------------------------------//삭제된 메모 보기 버튼----------------------------------->
+            </div>
+            <!-------------------------------//좌측 메뉴----------------------------------->
+
+            <!-------------------------------중앙 컨트롤러 및 컨텐츠 영역----------------------------------->
+            <div id="content">
+              <!-------------------------------컨트롤러----------------------------------->
+              <div id="controller" class="mdl-shadow--2dp">
+                <span>메모 작성 ...</span>
+              </div>
+              <!-------------------------------//컨트롤러----------------------------------->
+              {% block content -%}
+                <!-------------------------------컨테이너----------------------------------->
+                <div id="container">
+                  {% block container -%}
+                  {%- endblock %}
+                </div>
+                <!-------------------------------//컨테이너----------------------------------->
+              {%- endblock %}
+            </div>
+            <!-------------------------------//중앙 컨트롤러 및 컨텐츠 영역----------------------------------->
+          </div>
+          <!-------------------------------//WRAPPER: 높이값을 위해----------------------------------->
+        </main>
+        <!-------------------------------//MAIN----------------------------------->
+      </div>
+      <!-------------------------------BLOCK TAIL----------------------------------->
+      {% block tail -%}
+      {%- endblock %}
+      <!-------------------------------//BLOCK TAIL----------------------------------->
       {% endblock %}
       <!-------------------------------//BLOCK BODY----------------------------------->
     </body>
