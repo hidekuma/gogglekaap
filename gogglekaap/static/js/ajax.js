@@ -251,7 +251,11 @@ const MEMO = (function(){
           $.each(r, function (_, el){
             itemHtmls += _makeMemoHtml(el);
           });
-          itemHtmls += _makeMoreItemHtml();
+          if (r.length > 0) {
+            itemHtmls += _makeMoreItemHtml();
+          } else {
+            itemHtmls += _makeNoMoreItemHtml();
+          }
           const $items = $(itemHtmls);
           $GRID.append($items).masonry('appended', $items);
         },
