@@ -231,7 +231,7 @@ class Memo(Resource):
 @ns.route('/<id>/image')
 @ns.param('id', 'The memo identifier')
 class MemoImage(Resource):
-    @ns.marshal_with(memo, skip_none=True)
+
     def delete(self, id):
         '''메모 이미지 삭제'''
         memo = MemoModel.query.get_or_404(id)

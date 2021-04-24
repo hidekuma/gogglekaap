@@ -289,7 +289,6 @@ const MEMO = (function(){
         resetModalFields();
       },
       success: function(r){
-        origin_data = r;
         $modalTitle.val(r.title);
         $modalContent.val(r.content);
         $modalClose.attr('data-id', r.id);
