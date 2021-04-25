@@ -23,8 +23,11 @@ WORKDIR /var/www/gogglekaap
 # 설치한 패키지 명령어를 사용하기 위해 환경변수를 등록!
 ENV PATH="/home/python/.local/bin:${PATH}"
 
+# 엔트리포인트 쉘 실행관한 추가
+RUN chmod +x ./etc/docker-entrypoint.sh
+
 # 8080포트를 노출 시켜줄거야
 EXPOSE 8080
 
 # 유니콘 실행
-CMD gunicorn --bind :8080 --workers 2 --threads 8 'gogglekaap:create_app()'
+# CMD gunicorn --bind :8080 --workers 2 --threads 8 'gogglekaap:create_app()'
